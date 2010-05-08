@@ -100,7 +100,7 @@ GmapsMarkerManager.prototype.removeMarkerByNumber = function(index){
  * @param {Boolean} remove удалить ли маркеры из менеджера
  */
 GmapsMarkerManager.prototype.clear = function(remove){
-  for(var i in this.markers) {
+  for (var i in this.markers) {
     if (typeof this.markers[i] == 'object') {
       this.markers[i].setMap(null); // ie fix
     }
@@ -120,7 +120,6 @@ GmapsMarkerManager.prototype.draw = function(){
   google.maps.event.addListener(this.map, "zoom_changed", function() {
     me.initial = true;
   }); 
-  
 }
 
 
@@ -143,10 +142,14 @@ GmapsMarkerManager.prototype.refresh = function(){
  * @param {Boolean} remove удалить ли маркеры из вьюпорта
  */
 GmapsMarkerManager.prototype.clearGroupMarkers = function(remove){
-  for(var i = 0; i < this.view_port.markers.length; i++)
-    if(this.view_port.markers[i].alias)
+  for (var i = 0; i < this.view_port.markers.length; i++) {
+    if(this.view_port.markers[i].alias) {
       this.view_port.markers[i].alias.setMap(null);
-  if(remove) this.view_port.markers = new Array();
+    }
+  }
+  if (remove) {
+    this.view_port.markers = new Array();
+  }
   return true;
 }
 
@@ -160,8 +163,9 @@ GmapsMarkerManager.prototype.buildMapGrid = function(force){
   force = force || false;
   this.view_port.cells = this.buildGrid(this.calculateGridOptParams(this.markers));
   for (var i = 0; i < this.view_port.cells.length; i++) {
-    if(typeof this.view_port.markers[i] == 'undefined' || force)
+    if(typeof this.view_port.markers[i] == 'undefined' || force) {
       this.view_port.markers[i] = new Object();
+    }  
   }
 }
 
@@ -211,8 +215,8 @@ GmapsMarkerManager.prototype.calculateGridOptParams = function(markers){
  */
 GmapsMarkerManager.prototype.buildGrid = function(params){
   var cells = new Array();
-  for(var i = params.start.x; i < params.end.x; i += params.cell.width){
-    for(var j = params.start.y; j < params.end.y; j += params.cell.height) {
+  for (var i = params.start.x; i < params.end.x; i += params.cell.width) {
+    for (var j = params.start.y; j < params.end.y; j += params.cell.height) {
       cells.push(new google.maps.LatLngBounds(this.projection.fromDivPixelToLatLng(new google.maps.Point(i, j + params.cell.height)),
                                               this.projection.fromDivPixelToLatLng(new google.maps.Point(i + params.cell.width, j)))
                                             );
@@ -229,7 +233,7 @@ GmapsMarkerManager.prototype.buildGrid = function(params){
  * @param {Array} cells массив ячеек расчётной сетки
  */
 GmapsMarkerManager.prototype.checkMarkers = function(markers, cells){
-  for(var i = 0; i < cells.length; i++){
+  for(var i = 0; i < cells.length; i++) {
     this.view_port.markers[i].count = 0;
     this.view_port.markers[i].items = new Array();
     this.view_port.markers[i].bounds = cells[i];
@@ -253,14 +257,13 @@ GmapsMarkerManager.prototype.groupMarkers = function(){
   
   var infowindow_baloon = infowindow_baloon || new google.maps.InfoWindow();
   
-  for(var i = 0; i < this.view_port.markers.length; i++){
+  for (var i = 0; i < this.view_port.markers.length; i++) {
     if(this.view_port.markers[i].count && !this.view_port.markers[i].alias){
       me = this;
       
       if (this.threshold) {
-        for(var j = 0; j < this.view_port.markers[i].items.length; j++){
+        for (var j = 0; j < this.view_port.markers[i].items.length; j++) {
           this.view_port.markers[i].items[j].setMap(this.map);
-            
           google.maps.event.addListener(this.view_port.markers[i].items[j], "click", function(){
             if (me.markers_infowindows[i]) {
               infowindow_baloon.setContent(this.markers_infowindows[i]);
@@ -269,9 +272,9 @@ GmapsMarkerManager.prototype.groupMarkers = function(){
           });
         }
       } else {
-       
-        for(var j = 0; j < this.view_port.markers[i].items.length; j++)
+        for(var j = 0; j < this.view_port.markers[i].items.length; j++) {
           this.view_port.markers[i].items[j].setMap(null);
+        }  
       
         if (this.view_port.markers[i].count == 1) {
           this.view_port.markers[i].alias = this.view_port.markers[i].items[0];
@@ -290,9 +293,12 @@ GmapsMarkerManager.prototype.groupMarkers = function(){
             title: this.view_port.markers[i].count.toString()
           });
           
-          if(this.group_icon_src) this.view_port.markers[i].alias.setIcon(new google.maps.MarkerImage(this.group_icon_src));
-          if(this.group_icon_shadow) this.view_port.markers[i].alias.setShadow(new google.maps.MarkerImage(this.group_icon_shadow));
-          
+          if (this.group_icon_src) {
+            this.view_port.markers[i].alias.setIcon(new google.maps.MarkerImage(this.group_icon_src));
+          }  
+          if (this.group_icon_shadow) {
+            this.view_port.markers[i].alias.setShadow(new google.maps.MarkerImage(this.group_icon_shadow));
+          }
           this.view_port.markers[i].alias.setMap(this.map);
         }
       }
