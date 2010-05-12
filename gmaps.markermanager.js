@@ -217,8 +217,8 @@ GmapsMarkerManager.prototype.buildGrid = function(params){
   var cells = new Array();
   for (var i = params.start.x; i < params.end.x; i += params.cell.width) {
     for (var j = params.start.y; j < params.end.y; j += params.cell.height) {
-      cells.push(new google.maps.LatLngBounds(this.projection.fromDivPixelToLatLng(new google.maps.Point(i, j + params.cell.height)),
-                                              this.projection.fromDivPixelToLatLng(new google.maps.Point(i + params.cell.width, j)))
+      cells.push(new google.maps.LatLngBounds(this.getProjection().fromDivPixelToLatLng(new google.maps.Point(i, j + params.cell.height)),
+                                              this.getProjection().fromDivPixelToLatLng(new google.maps.Point(i + params.cell.width, j)))
                                             );
     }
   }
